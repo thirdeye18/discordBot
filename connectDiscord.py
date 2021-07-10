@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
 """
-Discord Bot Handling Script 
+Discord Bot Handling Script
 Author: Justin Hammel
 Description: Script for connecting and handling the interaction of the bot with the
                 server. Script expects there to be a Token for your bot and the name
-                of your server placed into a file called .env in the same directory 
+                of your server placed into a file called .env in the same directory
                 as all the other files for the script.
 """
 
@@ -25,6 +25,10 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 
+description = '''An example bot to showcase the discord.ext.commands extension module. There are a number of utility commands being showcased here.'''
+
+bot = commands.Bot(command_prefix='?', description=description, intents=intents)
+
 ## client represents connection to discord, similar to a sftp object
 ## handles events, tracks state, and interacts with Discord APIs
 class MyClient(discord.Client):
@@ -36,7 +40,7 @@ class MyClient(discord.Client):
         print(f'{guild.name}(id: {guild.id})')  # print the server name and id
         ## Print out the members of the server
         members = '\n - '.join([member.name for member in guild.members])   # Puts all the guild members names in a list
-        print(f'Guild Members:\n - {members}') 
+        print(f'Guild Members:\n - {members}')
 
     async def on_message(self, message):
         ## First if loop checks to see if the message came from the bot prevents recursive calls
@@ -49,12 +53,12 @@ class MyClient(discord.Client):
             await message.channel.send(magicResponse)
 
     ## Greeting when new member joins the chat
-    async def on_member_join(self, member):
-        channel = member.guild.system_channel
-        if channel is not None:
-            await channel.send(f'Ello {0.mention}, fancy a cuppa?'.format(member))
-            await member.create_dm()    # Next part will send a DM to the member that just joined the channel
-            await member.dm_channel.send(f'Ello {member.name}, lovely server innit!')   
+#    async def on_member_join(self, member):
+#        guild = member.guild
+#        if guild.system_channel is not None:
+#            await guild.system_channel.send(f'Ello {0.mention}, fancy a cuppa?'.format(member, guild))
+#            await member.create_dm()    # Next part will send a DM to the member that just joined the channel
+#            await member.dm_channel.send(f'Ello {member.name}, lovely server innit!')
 
 #        if message.content == 'hello':
 #            response = "No, I said ello, but that's close enough"
@@ -64,5 +68,6 @@ intents = discord.Intents.default()
 intents.members = True
 intents.guilds = True
 
+bot.run(TOKEN)
 client = MyClient(intents = intents)
 client.run(TOKEN)
