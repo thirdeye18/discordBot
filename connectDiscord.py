@@ -14,8 +14,11 @@ Description: Script for connecting and handling the interaction of the bot with 
 import os
 ## importing discord api, enables interaction with discord
 import discord
+from discord.ext import commands    # for running commands easier than using @client.event
 ## import for handling .env files, .env files store credentials
 from dotenv import load_dotenv
+## allows random choices for the magic 8 ball feature
+import random
 
 load_dotenv()
 ## Discord token read into program from an environment variable for security
@@ -24,28 +27,42 @@ GUILD = os.getenv('DISCORD_GUILD')
 
 ## client represents connection to discord, similar to a sftp object
 ## handles events, tracks state, and interacts with Discord APIs
-client = discord.Client()
+class MyClient(discord.Client):
+    async def on_ready(self):
+        for guild in client.guilds:
+            if guild.name == GUILD:
+                break
+        print(f'{client.user} has connected to the following server:')  # print the bots name
+        print(f'{guild.name}(id: {guild.id})')  # print the server name and id
+        ## Print out the members of the server
+        members = '\n - '.join([member.name for member in guild.members])   # Puts all the guild members names in a list
+        print(f'Guild Members:\n - {members}') 
 
-""" Here the @client.events handle everything that the bot reacts to in the server"""
-
-@client.event
-async def on_ready():
-    for guild in client.guilds: # loop through client.guilds data matching for guild name in .env
-        if guild.name == GUILD:
-        break
-    print(f'{client.user} has connected to the following server:')  # print the bots name
-    print(f'{guild.name}(id: {guild.id})')  # print the server name and id
-
-    ## Print out the members of the server
-    members = '\n - '.join([member.name for member in guild.members])
-    print(f'Guild Members:\n - {members}')  # Only prints the bots name for some reason
+    async def on_message(self, message):
+        ## First if loop checks to see if the message came from the bot prevents recursive calls
+        if message.author == self.user:
+            return
+        if message.content.startswith('!hello'):
+            await message.channel.send('Hello World!', mention_author=True)
+        if message.content.startswith('?magic8ball'):
+            magicResponse = random.choice(['It is certain','As i see it, yes', 'Dont count on it', 'Without a doubt', 'Definitely', 'Very doubtful', 'Outlook not so good', 'My sources say no', 'My reply is no', 'Most likely', 'You may rely on it', 'Ask again later'])
+            await message.channel.send(magicResponse)
 
     ## Greeting when new member joins the chat
-    @client.event
-    async def on_member_join(member):
-        await member.create_dm()    # Next part will send a DM to the member that just joined the channel
-        await member.dm_channel.send(
-            f'Ello {member.name}, lovely server innit!'
-        )
+    async def on_member_join(self, member):
+        channel = member.guild.system_channel
+        if channel is not None:
+            await channel.send(f'Ello {0.mention}, fancy a cuppa?'.format(member))
+            await member.create_dm()    # Next part will send a DM to the member that just joined the channel
+            await member.dm_channel.send(f'Ello {member.name}, lovely server innit!')   
 
+#        if message.content == 'hello':
+#            response = "No, I said ello, but that's close enough"
+#            await message.channel.send(response)
+
+intents = discord.Intents.default()
+intents.members = True
+intents.guilds = True
+
+client = MyClient(intents = intents)
 client.run(TOKEN)
