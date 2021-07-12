@@ -19,6 +19,8 @@ from dotenv import load_dotenv
 import os
 ## allows random choices for the magic 8 ball feature
 import random
+## import my dice rolling function
+from dieRoller import *
 
 load_dotenv()   # loading dotenv to handle .env files
 ## Discord token read into program from an environment variable for security
@@ -32,6 +34,7 @@ MyClient is the new object that interacts with Discord through the API by
 new methods with <async def>.
 """
 class MyClient(discord.Client):
+
     async def on_ready(self):
         for guild in client.guilds:
             if guild.name == GUILD:
@@ -75,7 +78,12 @@ class MyClient(discord.Client):
             await message.channel.send(magicResponse)
         ## command to disconnect bot on !quit
         # if message.content.startswith('quit'):
-
+        # dice rolling functionality
+        if message.content.startswith('!roll'):
+            roll_sum = dieMain(messageContent)  # call dieRoller functions
+            await message.channel.send(
+                f"Result of {messageContent} is {roll_sum}"
+            )
 
     ## Greeting when new member joins the chat
     async def on_member_join(self, member):
