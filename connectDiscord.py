@@ -4,9 +4,9 @@
 Discord Bot Handling Script
 Author: Justin Hammel
 Description: Script for connecting and handling the interaction of the bot with the
-                server. Script expects there to be a Token for your bot and the name
-                of your server placed into a file called .env in the same directory
-                as all the other files for the script.
+            server. Script expects there to be a Token for your bot and the name
+            of your server placed into a file called .env in the same directory
+            as all the other files for the script.
 """
 
 """External library imports"""

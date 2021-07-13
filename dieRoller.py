@@ -6,8 +6,8 @@ Author: Justin Hammel
 Description: Functions that format dice roll command and generate random numbers
             corresponding to requested dice roll.
             Uses the random library to generate a pseudo-random number based on
-            the number of sides on the dice. Function expects 2 ints to be passed from the
-            user.
+            the number of sides on the dice. Function expects 2 ints to be passed
+            from the user.
 """
 
 """External library imports"""
@@ -65,7 +65,6 @@ and will return the sum of the die roll.
 def dieMain(user_command):
     """ Called at runtime"""
     # user_command = input("Insert command in the form !rollxdy\n").lower()
-    # print(list(user_command))
     roll_nums = rollFormatter(user_command)
     print(roll_nums)
     f_qty = int(roll_nums[0])
