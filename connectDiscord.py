@@ -12,11 +12,17 @@ Description: Script for connecting and handling the interaction of the bot with 
 """External library imports"""
 
 ## importing discord api, enables interaction with discord
+## Second import is for bot command abstraction (easy commands)
 import discord
+from discord.ext import commands,tasks
+## For future music functionality
+import youtube_dl
 ## import for handling .env files, .env files store credentials
 from dotenv import load_dotenv
 ## Needed to access the .env files
 import os
+# To access the sys.exit function when killing the bot
+import sys
 ## allows random choices for the magic 8 ball feature
 import random
 ## import my dice rolling function
@@ -40,12 +46,12 @@ class MyClient(discord.Client):
             if guild.name == GUILD:
                 break
         ## Printing the bots name to the console
-        print(f'{client.user} has connected to the following server:')
-        print(f'{guild.name}(id: {guild.id})')  # print the server name and id
+        print(f"{client.user} has connected to the following server:")
+        print(f"{guild.name}(id: {guild.id})")  # print the server name and id
         ## Print out the members of the server in the console
         ## First part puts all the member's names in a list
         members = '\n - '.join([member.name for member in guild.members])
-        print(f'Guild Members:\n - {members}')
+        print(f"Guild Members:\n - {members}")
 
     async def on_message(self, message):
         ## checks if the message came from the bot, prevents recursive calls
@@ -69,15 +75,27 @@ class MyClient(discord.Client):
         ## keyword detection uses existing string methods to parse messages
         ## keyword commands for the bot to respond to, start with !
         if message.content.startswith('!hello'):
-            await message.channel.send('Ello!', mention_author=True)
+            await message.channel.send("Ello!", mention_author=True)
+
         ## can also check endswith to detect questions
-        if message.content.endswith("hello?"):
+        if message.content.endswith('hello?'):
             await message.reply("No, I said ello, but that's close enough.")
+
+        ## Playing with random text selection
         if message.content.endswith('?magic8ball'):     #need to make sure the question ends with key word to trigger
             magicResponse = random.choice(['It is certain','As i see it, yes', 'Dont count on it', 'Without a doubt', 'Definitely', 'Very doubtful', 'Outlook not so good', 'My sources say no', 'My reply is no', 'Most likely', 'You may rely on it', 'Ask again later'])
             await message.channel.send(magicResponse)
+
         ## command to disconnect bot on !quit
-        # if message.content.startswith('quit'):
+        # if message.content.startswith('!quit'):
+            # await message.channel.send("TTFN")
+            # await client.close()
+            #if message.author == client.owner:
+                #await message.channel.send("TTFN!", mention_author=True)
+                #sys.exit("Elvis has left the building")
+            #else:
+                #await message.channel.send("You're not the boss of me!", mention_author=True)
+
         # dice rolling functionality
         if message.content.startswith('!roll'):
             roll_sum = dieMain(messageContent)  # call dieRoller functions
@@ -89,14 +107,15 @@ class MyClient(discord.Client):
     async def on_member_join(self, member):
         await member.create_dm()     # Next part will send a DM to the member that just joined the channe
         await member.dm_channel.send(
-            f'Hi {member.name}, welcome to the mad house. Fancy a cuppa?'
+            f"Hi {member.name}, welcome to the mad house. Fancy a cuppa?"
         )
 
 ## Intents are like permissions for what the bot can do
-intents = discord.Intents.default()
-intents.members = True  # this intent is required to send messages
-intents.guilds = True   # this would be allowed if I wanted the bot to be able to kick members
+intents = discord.Intents.all()
+#intents.members = True  # this intent is required to send messages
+#intents.guilds = True   # this would be allowed if I wanted the bot to be able to kick members
 
 ## This is the portiong that actually initializes and starts the bot
 client = MyClient(intents = intents)
+bot = commands.Bot(command_prefix='!',intents=intents)
 client.run(TOKEN)
