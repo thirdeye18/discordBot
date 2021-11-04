@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 """
 Discord Bot Handling Script
 Author: Justin Hammel
@@ -10,19 +9,16 @@ Description: Script for connecting and handling the interaction of the bot with 
 """
 
 """External library imports"""
-
 ## importing discord api, enables interaction with discord
 ## Second import is for bot command abstraction (easy commands)
 import discord
-from discord.ext import commands,tasks
+#from discord.ext import commands,tasks
 ## For future music functionality
 import youtube_dl
 ## import for handling .env files, .env files store credentials
 from dotenv import load_dotenv
 ## Needed to access the .env files
 import os
-# To access the sys.exit function when killing the bot
-import sys
 ## allows random choices for the magic 8 ball feature
 import random
 ## import my dice rolling function
@@ -86,15 +82,20 @@ class MyClient(discord.Client):
             magicResponse = random.choice(['It is certain','As i see it, yes', 'Dont count on it', 'Without a doubt', 'Definitely', 'Very doubtful', 'Outlook not so good', 'My sources say no', 'My reply is no', 'Most likely', 'You may rely on it', 'Ask again later'])
             await message.channel.send(magicResponse)
 
-        ## command to disconnect bot on !quit
-        # if message.content.startswith('!quit'):
-            # await message.channel.send("TTFN")
-            # await client.close()
-            #if message.author == client.owner:
-                #await message.channel.send("TTFN!", mention_author=True)
-                #sys.exit("Elvis has left the building")
-            #else:
-                #await message.channel.send("You're not the boss of me!", mention_author=True)
+        # ## message commands to join and leave voice chat
+        # if message.content == '!join':
+        #     if not message.author.voice:
+        #         await message.channel.send("{} is not connected to a voice channel".format(message.author.name))
+        #         return
+        #     else:
+        #         channel = message.author.voice.channel
+        #         await channel.connect()
+        # if message.content == '!leave':
+        #     voice_client = message.guild.voice_client
+        #     if voice_client.is_connected():
+        #         await voice_client.disconnect()
+        #     else:
+        #         await send("The bot is not connected to a voice channel.")
 
         # dice rolling functionality
         if message.content.startswith('!roll'):
@@ -103,7 +104,7 @@ class MyClient(discord.Client):
                 f"Result of {messageContent} is {roll_sum}"
             )
 
-    ## Greeting when new member joins the chat
+    # Greeting when new member joins the chat
     async def on_member_join(self, member):
         await member.create_dm()     # Next part will send a DM to the member that just joined the channe
         await member.dm_channel.send(
@@ -112,10 +113,6 @@ class MyClient(discord.Client):
 
 ## Intents are like permissions for what the bot can do
 intents = discord.Intents.all()
-#intents.members = True  # this intent is required to send messages
-#intents.guilds = True   # this would be allowed if I wanted the bot to be able to kick members
-
 ## This is the portiong that actually initializes and starts the bot
 client = MyClient(intents = intents)
-bot = commands.Bot(command_prefix='!',intents=intents)
 client.run(TOKEN)
