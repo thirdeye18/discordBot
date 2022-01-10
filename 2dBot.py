@@ -1,16 +1,5 @@
 #!/usr/bin/env python3
-"""
-Discord Bot Handling Script
-Author: Justin Hammel
-Description: Script for connecting and handling the interaction of the bot with the
-            server. Script expects there to be a Token for your bot and the name
-            of your server placed into a file called .env in the same directory
-            as all the other files for the script.
-"""
 
-"""
-External library imports
-"""
 import discord  # discord api
 from discord.ext import commands, tasks  # easier bot commands
 import youtube_dl  # download YouTube audio for music in voice chat
@@ -20,6 +9,15 @@ import os  # to access the filesystem for the .env files
 
 # import random   # for random functions (dice, 8ball)
 # from dieRoller import * # example dice function
+
+"""
+Discord Bot Handling Script
+Author: Justin Hammel
+Description: Script for connecting and handling the interaction of the bot with the
+            server. Script expects there to be a Token for your bot and the name
+            of your server placed into a file called .env in the same directory
+            as all the other files for the script.
+"""
 
 """
 Here's where we pull the token from the .env file for security reasons
@@ -165,7 +163,7 @@ async def on_ready():
         for channel in guild.text_channels:
             if str(channel) == "general":
                 await channel.send('Bot Activated..')
-                await channel.send(file=discord.File(r'C:\Users\Justin\github\discordBot\2d.gif'))
+                await channel.send(file=discord.File(r'F:\01-coding\discordBot\2d.gif'))
         print('Active in {}\n Member Count : {}'.format(guild.name, guild.member_count))
     print('------')
 
@@ -178,7 +176,7 @@ async def hello(ctx):
     await ctx.send("Ello!")
 
 
-## These have now been moved specifically to
+# These have now been moved specifically to
 # @bot.command(name='join', help='Tells the bot to join the voice channel')
 # async def join(ctx):
 #     if not ctx.message.author.voice:

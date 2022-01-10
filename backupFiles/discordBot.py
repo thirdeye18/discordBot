@@ -10,7 +10,7 @@ Description: Main calls the Script for connecting and handling the interaction
 """
 
 # Import function to connect the bot to discord server
-import connectDiscord
+from backupFiles import connectDiscord
 
 
 def main():
