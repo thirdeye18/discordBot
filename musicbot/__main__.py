@@ -7,7 +7,7 @@ Description: Main calls the Script for connecting and handling the interaction
 """
 External library imports
 """
-from . import Bot
+import bot
 
 if __name__ == "__main__":
     bot.run()

@@ -9,22 +9,22 @@ Description: Script for connecting and handling the interaction of the bot with 
 """
 
 """External library imports"""
-## importing discord api, enables interaction with discord
-## Second import is for bot command abstraction (easy commands)
+# importing discord api, enables interaction with discord
+# Second import is for bot command abstraction (easy commands)
 import discord
-#from discord.ext import commands,tasks
-## For future music functionality
+# from discord.ext import commands,tasks
+# For future music functionality
 import youtube_dl
-## import for handling .env files, .env files store credentials
+# import for handling .env files, .env files store credentials
 from dotenv import load_dotenv
-## Needed to access the .env files
+# Needed to access the .env files
 import os
-## allows random choices for the magic 8 ball feature
+# allows random choices for the magic 8 ball feature
 import random
-## import my dice rolling function
+# import my dice rolling function
 from dieRoller import *
 
-load_dotenv()   # loading dotenv to handle .env files
+load_dotenv()  # loading dotenv to handle .env files
 ## Discord token read into program from an environment variable for security
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
@@ -35,6 +35,8 @@ object that can then have it's own methods.
 MyClient is the new object that interacts with Discord through the API by
 new methods with <async def>.
 """
+
+
 class MyClient(discord.Client):
 
     async def on_ready(self):
@@ -60,9 +62,9 @@ class MyClient(discord.Client):
             'denial of service'
         ]
 
-        messageContent = message.content    # store the message in a string
+        messageContent = message.content  # store the message in a string
         ## loop through the message looking for the key words
-        if len(messageContent) > 0: # make sure the message contains something
+        if len(messageContent) > 0:  # make sure the message contains something
             for word in bad_words:
                 if word in messageContent:
                     await message.delete()  # delete the message if bad_words
@@ -78,8 +80,11 @@ class MyClient(discord.Client):
             await message.reply("No, I said ello, but that's close enough.")
 
         ## Playing with random text selection
-        if message.content.endswith('?magic8ball'):     #need to make sure the question ends with key word to trigger
-            magicResponse = random.choice(['It is certain','As i see it, yes', 'Dont count on it', 'Without a doubt', 'Definitely', 'Very doubtful', 'Outlook not so good', 'My sources say no', 'My reply is no', 'Most likely', 'You may rely on it', 'Ask again later'])
+        if message.content.endswith('?magic8ball'):  # need to make sure the question ends with key word to trigger
+            magicResponse = random.choice(
+                ['It is certain', 'As i see it, yes', 'Dont count on it', 'Without a doubt', 'Definitely',
+                 'Very doubtful', 'Outlook not so good', 'My sources say no', 'My reply is no', 'Most likely',
+                 'You may rely on it', 'Ask again later'])
             await message.channel.send(magicResponse)
 
         # ## message commands to join and leave voice chat
@@ -106,13 +111,14 @@ class MyClient(discord.Client):
 
     # Greeting when new member joins the chat
     async def on_member_join(self, member):
-        await member.create_dm()     # Next part will send a DM to the member that just joined the channe
+        await member.create_dm()  # Next part will send a DM to the member that just joined the channe
         await member.dm_channel.send(
             f"Hi {member.name}, welcome to the mad house. Fancy a cuppa?"
         )
 
+
 ## Intents are like permissions for what the bot can do
 intents = discord.Intents.all()
 ## This is the portiong that actually initializes and starts the bot
-client = MyClient(intents = intents)
+client = MyClient(intents=intents)
 client.run(TOKEN)

@@ -11,7 +11,7 @@ External library imports
 """
 import discord  # discord api
 from discord.ext import commands    # easier bot commands
-from . import config
+import config
 from .cogs import music, error, meta, tips
 
 cfg = config.load_config()  # Loading config file

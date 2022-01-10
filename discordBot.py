@@ -9,12 +9,14 @@ Description: Main calls the Script for connecting and handling the interaction
                 from within the main.
 """
 
-## Import function to connect the bot to discord server
+# Import function to connect the bot to discord server
 import connectDiscord
+
 
 def main():
     """Called at runtime"""
-    connectDiscord()    # This script is what does everythong
+    connectDiscord()  # This script is what does everything
+
 
 if __name__ == "__main__":
     main()

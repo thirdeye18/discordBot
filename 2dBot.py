@@ -12,25 +12,26 @@ Description: Script for connecting and handling the interaction of the bot with 
 External library imports
 """
 import discord  # discord api
-from discord.ext import commands,tasks  # easier bot commands
-import youtube_dl   # download youtube audio for music in voice chat
+from discord.ext import commands, tasks  # easier bot commands
+import youtube_dl  # download YouTube audio for music in voice chat
 import asyncio
 from dotenv import load_dotenv  # to handle .env file
-import os   # to access the filesystem for the .env files
+import os  # to access the filesystem for the .env files
+
 # import random   # for random functions (dice, 8ball)
 # from dieRoller import * # example dice function
 
 """
 Here's where we pull the token from the .env file for security reasons
 """
-load_dotenv()   # loading dotenv to handle .env files
+load_dotenv()  # loading dotenv to handle .env files
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 
 """
 This is the youtube magic and setup options for youtube_dl
 """
-youtube_dl.utils.bug_reports_message = lambda: ''   # Suppress noise about console usage from errors
+youtube_dl.utils.bug_reports_message = lambda: ''  # Suppress noise about console usage from errors
 
 ytdl_format_options = {
     'format': 'bestaudio/best',
@@ -43,7 +44,7 @@ ytdl_format_options = {
     'quiet': True,
     'no_warnings': True,
     'default_search': 'auto',
-    'source_address': '0.0.0.0' # bind to ipv4 since ipv6 addresses cause issues sometimes
+    'source_address': '0.0.0.0'  # bind to ipv4 since ipv6 addresses cause issues sometimes
 }
 
 ffmpeg_options = {
@@ -51,6 +52,7 @@ ffmpeg_options = {
 }
 
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
+
 
 class YTDLSource(discord.PCMVolumeTransformer):
     def __init__(self, source, *, data, volume=0.5):
@@ -73,9 +75,12 @@ class YTDLSource(discord.PCMVolumeTransformer):
         filename = data['url'] if stream else ytdl.prepare_filename(data)
         return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
 
+
 """
 Specific youtube music bot commands
 """
+
+
 class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -147,24 +152,31 @@ class Music(commands.Cog):
         elif ctx.voice_client.is_playing():
             ctx.voice_client.stop()
 
-intents = discord.Intents().all()   # intents are permissions for the bot
+
+intents = discord.Intents().all()  # intents are permissions for the bot
 bot = commands.Bot(command_prefix='!', description='Relatively simple music bot example')
 
 """ Print message when the bot is ready and online """
+
+
 @bot.event
 async def on_ready():
     for guild in bot.guilds:
-        for channel in guild.text_channels :
-            if str(channel) == "general" :
+        for channel in guild.text_channels:
+            if str(channel) == "general":
                 await channel.send('Bot Activated..')
                 await channel.send(file=discord.File(r'C:\Users\Justin\github\discordBot\2d.gif'))
-        print('Active in {}\n Member Count : {}'.format(guild.name,guild.member_count))
+        print('Active in {}\n Member Count : {}'.format(guild.name, guild.member_count))
     print('------')
 
+
 """ Bot commands """
+
+
 @bot.command(name='hello', help='Bot says Ello')
 async def hello(ctx):
     await ctx.send("Ello!")
+
 
 ## These have now been moved specifically to
 # @bot.command(name='join', help='Tells the bot to join the voice channel')
