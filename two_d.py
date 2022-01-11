@@ -19,18 +19,18 @@ Description: Script for connecting and handling the interaction of the bot with 
             as all the other files for the script.
 """
 
-"""
-Here's where we pull the token from the .env file for security reasons
-"""
+
+# Retrieve data from .env file
 load_dotenv()  # loading dotenv to handle .env files
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
+
 
 """
 This is the youtube magic and setup options for youtube_dl
 """
 youtube_dl.utils.bug_reports_message = lambda: ''  # Suppress noise about console usage from errors
-
+# Options for music being played
 ytdl_format_options = {
     'format': 'bestaudio/best',
     'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
@@ -44,12 +44,16 @@ ytdl_format_options = {
     'default_search': 'auto',
     'source_address': '0.0.0.0'  # bind to ipv4 since ipv6 addresses cause issues sometimes
 }
-
+ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
+# ffmpeg video conversion options, -vn strips video from files being played, leaves just audio
 ffmpeg_options = {
     'options': '-vn'
 }
 
-ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
+
+"""
+
+"""
 
 
 class YTDLSource(discord.PCMVolumeTransformer):
@@ -154,7 +158,10 @@ class Music(commands.Cog):
 intents = discord.Intents().all()  # intents are permissions for the bot
 bot = commands.Bot(command_prefix='!', description='Relatively simple music bot example')
 
-""" Print message when the bot is ready and online """
+
+""" 
+Print message when the bot is ready and online 
+"""
 
 
 @bot.event
@@ -168,14 +175,19 @@ async def on_ready():
     print('------')
 
 
-""" Bot commands """
+""" 
+Bot commands not related to playing music/voice chat functions 
+"""
 
 
 @bot.command(name='hello', help='Bot says Ello')
 async def hello(ctx):
     await ctx.send("Ello!")
 
-""" Initialize and connect the bot. Will be called from main()."""
+
+""" 
+Initialize and connect the bot. Will be called from main().
+"""
 
 
 def run():
