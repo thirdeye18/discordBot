@@ -7,6 +7,7 @@ import asyncio  # for async calls
 from dotenv import load_dotenv  # to handle .env file
 import os  # to access the filesystem for the .env files
 from chatbot import chatbot  # chatbot imported from script
+import asyncio_runtime_error_event_loop_closed_fix
 
 # import random   # for random functions (dice, 8ball)
 # from dieRoller import * # example dice function
@@ -69,6 +70,9 @@ class YTDLSource(discord.PCMVolumeTransformer):
     @classmethod
     async def from_url(cls, url, *, loop=None, stream=False):
         loop = loop or asyncio.get_event_loop()
+
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
         data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=not stream))
         if 'entries' in data:
             # take first item from a playlist
@@ -246,7 +250,7 @@ async def hello(ctx):
 @bot.command(name='log_out', help='make bot leave channel')
 async def log_out(ctx):
     await ctx.send("TTFN!")
-    await bot.logout()
+    await bot.close()
 
 
 """
