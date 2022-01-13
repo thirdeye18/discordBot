@@ -16,6 +16,11 @@ trainer.train(
     "chatterbot.corpus.english"
 )
 
-response = chatbot.get_response("Good morning!")
 
-print(response)
+# while True:
+#     userInput = input("\n>> ")
+#     print(userInput)
+#     if userInput == "exitnow":
+#         break
+#     response = chatbot.get_response(userInput)
+#     print(response)

@@ -1,10 +1,10 @@
 #!/usr/bin/main python3
 
-import two_d
+from two_d import bot, TOKEN
 
 
 def main():
-    two_d.run()
+    bot.run(TOKEN)
 
 
 if __name__ == "__main__":
