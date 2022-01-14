@@ -1,0 +1,4 @@
+discord~=1.7.3
+python-dotenv~=0.19.2
+chatbot~=1.5.2b0
+ChatterBot~=1.0.4

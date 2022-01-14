@@ -1,9 +1,10 @@
 #!/usr/bin/main python3
 
-from two_d import bot, TOKEN
+from twod import bot, TOKEN
 
 
 def main():
+    """Called at runtime"""
     bot.run(TOKEN)
 
 

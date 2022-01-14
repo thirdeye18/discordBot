@@ -1,7 +1,7 @@
 """fix yelling at me error"""
 from functools import wraps
-
 from asyncio.proactor_events import _ProactorBasePipeTransport
+import platform
 
 
 def silence_event_loop_closed(func):
@@ -16,5 +16,8 @@ def silence_event_loop_closed(func):
     return wrapper
 
 
-_ProactorBasePipeTransport.__del__ = silence_event_loop_closed(_ProactorBasePipeTransport.__del__)
+if platform.system() == 'Windows':
+    # Silence the exception here.
+    _ProactorBasePipeTransport.__del__ = silence_event_loop_closed(_ProactorBasePipeTransport.__del__)
+
 """fix yelling at me error end"""
