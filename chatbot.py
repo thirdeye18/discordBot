@@ -18,9 +18,11 @@ chatbot = ChatBot(
 
 trainer = ChatterBotCorpusTrainer(chatbot)
 
-trainer.train(
-    "chatterbot.corpus.english"
-)
+# This command only needs to run once to build initial database of responses.
+# 
+# trainer.train(
+#     "chatterbot.corpus.english"
+# )
 
 
 # while True:

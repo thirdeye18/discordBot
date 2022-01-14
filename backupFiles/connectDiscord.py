@@ -14,7 +14,7 @@ import os
 # allows random choices for the magic 8 ball feature
 import random
 # import my dice rolling function
-from dieRoller import *
+from dice import *
 
 """
 Discord Bot Handling Script
@@ -105,7 +105,7 @@ class MyClient(discord.Client):
 
         # dice rolling functionality
         if message.content.startswith('!roll'):
-            roll_sum = dieMain(messageContent)  # call dieRoller functions
+            roll_sum = die_main(messageContent)  # call dieRoller functions
             await message.channel.send(
                 f"Result of {messageContent} is {roll_sum}"
             )
